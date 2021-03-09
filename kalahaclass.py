@@ -115,6 +115,7 @@ class Kalaha():
                 position += 1
                 self.distribute_stone_on_board(player, position, stones_left, skip_kalaha)
 
+
 def main():
 
     game = Kalaha()
