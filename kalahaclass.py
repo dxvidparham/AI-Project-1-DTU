@@ -46,20 +46,24 @@ class Kalaha():
     def distribute_kalaha(self, player, stones_left, skip_kalaha, origin):
         if player == "player 1":
             if player == origin:
-                self.player1_kalaha += 1
                 if stones_left == 1:
                     if self.check_if_goal_state():
                         self.playing = False
                     else:
+                        self.player1_kalaha += 1
                         self.print_game_state()
                         print("\nThe last ball endet in the Kalaha. You're allowed to go again.")
                         position = int(input("player 1s turn (0, 1, 2, 3, 4, 5) "))
                         self.move(player, position, 2, origin=player)
 
-                else:
+                elif stones_left > 1:
+                    self.player1_kalaha += 1
                     position = 5
                     player = "player 2"
                     return self.distribute_stone_on_board(player, position, stones_left - 1, skip_kalaha, origin="player 1")
+
+                else:
+                    pass
 
             else:
                 if stones_left == 1:
@@ -78,19 +82,22 @@ class Kalaha():
 
         elif player == "player 2":
             if player == origin:
-                self.player2_kalaha += 1
                 if stones_left == 1:
                     if self.check_if_goal_state():
                         self.playing = False
                     else:
+                        self.player2_kalaha += 1
                         self.print_game_state()
                         print("\nThe last ball endet in the Kalaha. You're allowed to go again.")
                         position = int(input("player 2s turn (0, 1, 2, 3, 4, 5) "))
                         self.move(player, position, 1, origin=player)
-                else:
+                elif stones_left > 1:
+                    self.player2_kalaha += 1
                     position = 0
                     player = "player 1"
                     return self.distribute_stone_on_board(player, position, stones_left - 1, skip_kalaha, origin="player 2")
+                else:
+                    pass
 
             else:
                 if stones_left == 1:
@@ -208,13 +215,13 @@ def main():
                 print("\nTry again: Please insert a number between 0 and 5")
 
         if game.player1_kalaha > game.player2_kalaha:
-            print("The winner is:   Player 1!")
+            print("The Winner is:   Player 1!!!")
         elif game.player1_kalaha < game.player2_kalaha:
-            print("The winner is:   Player 2!")
+            print("The Winner is:   Player 2!!!")
         else:
             print("We got a draw!")
 
-        print(f"Score: [P2]{game.player2_kalaha}:{game.player1_kalaha}[P1]")
+        print(f"Score: [P2] {game.player2_kalaha}:{game.player1_kalaha} [P1]")
         print(f"Moves played by Player 1: {game.player1_move_count}")
 
 if __name__ == "__main__":
