@@ -184,7 +184,17 @@ class Kalaha():
                 self.player2_board[position] = 0
                 position -= 1
                 self.distribute_stone_on_board(player, position, stones_left, skip_kalaha, origin)
+    
+    def distribute_remaining(self, player):
 
+        if player == "player 1":
+            remaining_stones = sum(self.player2_board)
+            self.player2_kalaha += remaining_stones
+            print(f"\nCollecting {remaining_stones} remaining stones of Player 2.")
+        elif player == "player 2":
+            remaining_stones = sum(self.player1_board)
+            self.player1_kalaha += remaining_stones
+            print(f"\nCollecting {remaining_stones} remaining stones of Player 1.")
 
 def main():
 
@@ -200,6 +210,7 @@ def main():
                 game.move("player 1", raw_input, 2, origin="player 1")
                 game.print_game_state()
                 if game.check_if_goal_state():
+                    game.distribute_remaining("player 1")
                     game.playing = False
                     break
 
@@ -209,6 +220,7 @@ def main():
                 game.move("player 2", raw_input, 1, origin="player 2")
                 game.print_game_state()
                 if game.check_if_goal_state():
+                    game.distribute_remaining("player 2")
                     game.playing = False
                     break
             else:
