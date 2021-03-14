@@ -7,8 +7,8 @@ class Kalaha():
 
         self.player1_kalaha = 0
         self.player2_kalaha = 0
-        self.player1_board = [1, 1, 1, 1, 1, 1] # [4, 4, 4, 4, 4, 4]
-        self.player2_board = [1, 1, 1, 1, 1, 1] # [4, 4, 4, 4, 4, 4]
+        self.player1_board = [4, 4, 4, 4, 4, 4]
+        self.player2_board = [4, 4, 4, 4, 4, 4]
         self.player1_move_count = 0
         self.player2_move_count = 0
         self.playing = True
