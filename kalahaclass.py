@@ -7,8 +7,8 @@ class Kalaha():
 
         self.player1_kalaha = 0
         self.player2_kalaha = 0
-        self.player1_board = [4, 4, 4, 4, 4, 4]
-        self.player2_board = [4, 4, 4, 4, 4, 4]
+        self.player1_board = [1, 1, 1, 1, 1, 1] # [4, 4, 4, 4, 4, 4]
+        self.player2_board = [1, 1, 1, 1, 1, 1] # [4, 4, 4, 4, 4, 4]
         self.player1_move_count = 0
         self.player2_move_count = 0
         self.playing = True
@@ -185,16 +185,14 @@ class Kalaha():
                 position -= 1
                 self.distribute_stone_on_board(player, position, stones_left, skip_kalaha, origin)
     
-    def distribute_remaining(self, player):
+    def distribute_remaining(self):
 
-        if player == "player 1":
-            remaining_stones = sum(self.player2_board)
-            self.player2_kalaha += remaining_stones
-            print(f"\nCollecting {remaining_stones} remaining stones of Player 2.")
-        elif player == "player 2":
-            remaining_stones = sum(self.player1_board)
-            self.player1_kalaha += remaining_stones
-            print(f"\nCollecting {remaining_stones} remaining stones of Player 1.")
+        remaining1 = sum(self.player1_board)
+        self.player1_kalaha += remaining1
+        remaining2 = sum(self.player2_board)
+        self.player2_kalaha += remaining2
+
+        print(f"\nRemaining stones added:\nPlayer 1 - {remaining1}\nPlayer 2 - {remaining2}\n")
 
 def main():
 
@@ -210,7 +208,7 @@ def main():
                 game.move("player 1", raw_input, 2, origin="player 1")
                 game.print_game_state()
                 if game.check_if_goal_state():
-                    game.distribute_remaining("player 1")
+                    game.distribute_remaining()
                     game.playing = False
                     break
 
@@ -220,7 +218,7 @@ def main():
                 game.move("player 2", raw_input, 1, origin="player 2")
                 game.print_game_state()
                 if game.check_if_goal_state():
-                    game.distribute_remaining("player 2")
+                    game.distribute_remaining()
                     game.playing = False
                     break
             else:
