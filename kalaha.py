@@ -32,7 +32,7 @@ def check_if_goal_state(gamestate):
 
 
 def player1_turn(game):
-    best_move = algorithm.minimax(game, 3, True)[1]
+    best_move = algorithm.minimax(game, 3, float("-inf"), float("inf"),  True)[1]
     try:
         x = moves.move(game, "player 1", best_move).get("go_again", False)
     except AttributeError:
