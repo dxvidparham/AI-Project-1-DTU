@@ -1,23 +1,18 @@
 import sys
 
-from loguru import logger
-
 import algorithm
 import game_state
 import moves
 
 
-def get_game_state(gamestate):
+def print_game_state(gamestate):
 
-    game_state = f"""
-                         Current game state:
-                {gamestate.player2_kalaha}
-            Player 2:    {gamestate.player2_board}
-                         {gamestate.player1_board}       Player 1:
-                                                    {gamestate.player1_kalaha}
-    """
-
-    return game_state
+    print(" ")
+    print("             Current game state: ")
+    print(f"    {gamestate.player2_kalaha}")
+    print(f"Player 2:    {gamestate.player2_board}")
+    print(f"             {gamestate.player1_board}      Player 1:")
+    print(f"                                        {gamestate.player1_kalaha}")
 
 
 def check_if_goal_state(gamestate):
@@ -31,70 +26,51 @@ def check_if_goal_state(gamestate):
         return False
 
 
-def player1_turn(game):
-    best_move = algorithm.minimax(game, 3, float("-inf"), float("inf"),  True)[1]
-    try:
-        x = moves.move(game, "player 1", best_move).get("go_again", False)
-    except AttributeError:
-        moves.move(game, "player 1", best_move)
-        x = False
-
-    print("I made my move!!!!")
-    logger.info(get_game_state(game))
-
-    if check_if_goal_state(game):
-        moves.distribute_remaining(game)
-
-    elif x:
-        print("\nThe last ball ended in the Kalaha. You're allowed to go again.")
-        return player1_turn(game)
-
-
-def player2_turn(game):
-    try:
-        raw_input = int(input("player 2s turn (0, 1, 2, 3, 4, 5) "))
-    except ValueError:
-        print("\nTry again: Please insert a number between 0 and 5")
-        return player2_turn(game)
-
-    if raw_input in range(6):
-        try:
-            x = moves.move(game, "player 2", raw_input).get("go_again", False)
-        except AttributeError:
-            moves.move(game, "player 2", raw_input)
-            x = False
-
-        logger.info(get_game_state(game))
-
-        if check_if_goal_state(game):
-            moves.distribute_remaining(game)
-
-        elif x:
-            print("\nThe last ball ended in the Kalaha. You're allowed to go again.")
-            return player2_turn(game)
-
-    else:
-        print("\nTry again: Please insert a number between 0 and 5")
-        return player2_turn(game)
-
-
-@logger.catch
 def main():
 
+    playing = True
     game = game_state.GameState()
     raw_input = input("Welcome to a dumb implementation of Kalaha. Are you ready? y/n ")
+
     if raw_input.lower() == "y":
-        logger.info(get_game_state(game))
+        print_game_state(game)
 
-        while True:
+        while playing:
 
-            player1_turn(game)
+            # AIs turn
+            best_move = algorithm.minimax(game, 3, float("-inf"), float("inf"), True)[1]
+            moves.move(game, "player 1", best_move, True)
+            print("AI-Rian made his move!")
+            print_game_state(game)
+
             if check_if_goal_state(game):
+                moves.distribute_remaining(game)
+                playing = False
                 break
 
-            player2_turn(game)
-            if check_if_goal_state(game):
-                break
+            while game.go_again:
+                print("AI-Rian is allowed to go again.")
+                game.go_again = False
+                best_move = algorithm.minimax(
+                    game, 7, float("-inf"), float("inf"), True
+                )[1]
+                moves.move(game, "player 1", best_move, True)
+                print("AI-Rian made his move!")
+                print_game_state(game)
+
+            # Players turn
+            raw_input = int(input("player 2s turn (0, 1, 2, 3, 4, 5) "))
+
+            if raw_input in range(6):
+                moves.move(game, "player 2", raw_input, False)
+                print_game_state(game)
+                if check_if_goal_state(game):
+                    moves.distribute_remaining(game)
+                    playing = False
+                    break
+
+            else:
+                print("\nTry again: Please insert a number between 0 and 5")
 
         if game.player1_kalaha > game.player2_kalaha:
             print("The Winner is:   Player 1!!!")
@@ -112,10 +88,5 @@ def main():
 
 
 if __name__ == "__main__":
-    # the logfiles folder needs to be created for the logger to work
-    logger.debug("That's it, beautiful and simple logging!")
-    logger.add(
-        "logfiles/file_{time}.log",
-        format="{time:YYYY-MM-DD at HH:mm:ss} | {level} | {message}",
-    )
+
     main()

@@ -1,6 +1,5 @@
 import copy
 
-import game_state
 import kalaha
 import moves
 
@@ -34,16 +33,18 @@ def minimax(gamestate, depth, alpha, beta, maximizing_player):
     if maximizing_player:
         max_value = float("-inf")
         best_move = None
-
         for bowl in get_valid_moves(gamestate, "player 1"):
             tmp_gamestate = copy.deepcopy(gamestate)
-            moves.move(tmp_gamestate, "player 1", bowl)
-            evaluation = minimax(tmp_gamestate, depth - 1, alpha, beta, False)[0]
+            moves.move(tmp_gamestate, "player 1", bowl, True)
+            if tmp_gamestate.go_again:
+                evaluation = minimax(tmp_gamestate, depth - 1, alpha, beta, True)[0]
+            else:
+                evaluation = minimax(tmp_gamestate, depth - 1, alpha, beta, False)[0]
             max_value = max(max_value, evaluation)
-            alpha = max(alpha, evaluation)
-            if beta <= alpha:
+            alpha = max(alpha, max_value)
+            if alpha >= beta:
                 break
-            if max_value == evaluation:
+            elif max_value == evaluation:
                 best_move = bowl
         return max_value, best_move
 
@@ -52,12 +53,15 @@ def minimax(gamestate, depth, alpha, beta, maximizing_player):
         best_move = None
         for bowl in get_valid_moves(gamestate, "player 2"):
             tmp_gamestate = copy.deepcopy(gamestate)
-            moves.move(tmp_gamestate, "player 2", bowl)
-            evaluation = minimax(tmp_gamestate, depth - 1, alpha, beta, True)[0]
+            moves.move(tmp_gamestate, "player 2", bowl, True)
+            if tmp_gamestate.go_again:
+                evaluation = minimax(tmp_gamestate, depth - 1, alpha, beta, False)[0]
+            else:
+                evaluation = minimax(tmp_gamestate, depth - 1, alpha, beta, True)[0]
             min_value = min(min_value, evaluation)
-            beta = min(beta, evaluation)
+            beta = min(beta, min_value)
             if beta <= alpha:
                 break
-            if min_value == evaluation:
+            elif min_value == evaluation:
                 best_move = bowl
         return min_value, best_move
