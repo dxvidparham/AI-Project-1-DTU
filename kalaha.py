@@ -46,8 +46,9 @@ def main():
                  break
 
             while game.go_again:
+                print("AI-Rian is allowed to go again.")
                 game.go_again = False
-                best_move = algorithm.minimax(game, 6, float("-inf"), float("inf"), True)[1]
+                best_move = algorithm.minimax(game, 7, float("-inf"), float("inf"), True)[1]
                 moves.move(game, "player 1", best_move, True)
                 print("AI-Rian made his move!")
                 print_game_state(game)
