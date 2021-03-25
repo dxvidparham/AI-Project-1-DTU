@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7c1a5b21-d362-461a-826c-8fb986cda9b9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kalaha.py" beforeDir="false" afterPath="$PROJECT_DIR$/kalaha.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

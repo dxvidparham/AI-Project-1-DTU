@@ -30,6 +30,7 @@ def main():
     raw_input = input("Welcome to a dumb implementation of Kalaha. Are you ready? y/n ")
 
     if raw_input.lower() == "y":
+        print("Let the game begin!!")
         print_game_state(game)
 
         while playing:
@@ -46,7 +47,7 @@ def main():
                  break
 
             while game.go_again:
-                print("AI-Rian is allowed to go again.")
+                print("AI-Rian is allowed to go again. \n")
                 game.go_again = False
                 best_move = algorithm.minimax(game, 7, float("-inf"), float("inf"), True)[1]
                 moves.move(game, "player 1", best_move, True)
@@ -54,18 +55,22 @@ def main():
                 print_game_state(game)
 
             #Players turn
-            raw_input = int(input("player 2s turn (0, 1, 2, 3, 4, 5) "))
+            raw_input = -1
 
-            if raw_input in range(6):
-                moves.move(game, "player 2", raw_input, False)
-                print_game_state(game)
-                if check_if_goal_state(game):
-                    moves.distribute_remaining(game)
-                    playing = False
-                    break
+            while raw_input not in range(6):
+                try:
+                    raw_input = int(input("player 2s turn (0, 1, 2, 3, 4, 5) "))
+                except ValueError:
+                    print("\nTry again: Please insert a number between 0 and 5")
+                if raw_input not in range(6):
+                    print("\nTry again: Please insert a number between 0 and 5")
 
-            else:
-                print("\nTry again: Please insert a number between 0 and 5")
+            moves.move(game, "player 2", raw_input, False)
+            print_game_state(game)
+            if check_if_goal_state(game):
+                moves.distribute_remaining(game)
+                playing = False
+                break
 
         if game.player1_kalaha > game.player2_kalaha:
             print("The Winner is:   Player 1!!!")
