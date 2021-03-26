@@ -1,4 +1,13 @@
-import kalaha
+#!/usr/bin/env python3
+######################################################################
+# Authors:  - Ole Martin Soerensen <s165495>,
+#           - Bence Bejczy <s202821>,
+#           - Rian Leevinson <s202540>,
+#           - David Parham <s202385>
+# Course: Introduction to Artificial Intelligence
+# Spring 2021
+# Technical University of Denmark (DTU)
+######################################################################
 
 
 def capture_stones(gamestate, player, position):
@@ -8,55 +17,35 @@ def capture_stones(gamestate, player, position):
         if gamestate.player2_board[position] != 0:
             gamestate.player1_kalaha += 1 + gamestate.player2_board[position]
             gamestate.player2_board[position] = 0
-            return gamestate
-
         else:
             gamestate.player1_board[position] += 1
-            return gamestate
-
     else:
 
         if gamestate.player1_board[position] != 0:
             gamestate.player2_kalaha += 1 + gamestate.player1_board[position]
             gamestate.player1_board[position] = 0
-            return gamestate
-
         else:
             gamestate.player2_board[position] += 1
-            return gamestate
+
+    return gamestate
 
 
-def distribute_kalaha(gamestate, player, stones_left, origin, ai_player):
+def distribute_kalaha(gamestate, player, stones_left, origin):
+
     if player == "player 1":
 
         if player == origin:
-
-            if stones_left == 1 and not ai_player:
+            if stones_left == 1:
                 gamestate.player1_kalaha += 1
-                kalaha.print_game_state(gamestate)
-                if not kalaha.check_if_goal_state(gamestate):
-                    print(
-                        "\nThe last ball ended in the Kalaha. You're allowed to go again."
-                    )
-                    position = int(input("player 1s turn (0, 1, 2, 3, 4, 5) "))
-                    return move(gamestate, player, position, ai_player)
-                else:
-                    return gamestate
-
-            elif stones_left == 1 and ai_player:
-                gamestate.player1_kalaha += 1
-                if not kalaha.check_if_goal_state(gamestate):
-                    gamestate.go_again = True
-                    return gamestate
-                else:
-                    return gamestate
+                gamestate.go_again = True
+                return gamestate
 
             elif stones_left > 1:
                 gamestate.player1_kalaha += 1
                 position = 5
                 player = "player 2"
                 return distribute_stone_on_board(
-                    gamestate, player, position, stones_left - 1, "player 1", ai_player
+                    gamestate, player, position, stones_left - 1, "player 1"
                 )
 
             else:
@@ -66,39 +55,22 @@ def distribute_kalaha(gamestate, player, stones_left, origin, ai_player):
             position = 5
             player = "player 2"
             return distribute_stone_on_board(
-                gamestate, player, position, stones_left, "player 1", ai_player
+                gamestate, player, position, stones_left, "player 1"
             )
 
     elif player == "player 2":
 
         if player == origin:
-
-            if stones_left == 1 and not ai_player:
+            if stones_left == 1:
                 gamestate.player2_kalaha += 1
-                kalaha.print_game_state(gamestate)
-                if not kalaha.check_if_goal_state(gamestate):
-                    print(
-                        "\nThe last ball ended in the Kalaha. You're allowed to go again."
-                    )
-                    position = int(input("player 2s turn (0, 1, 2, 3, 4, 5) "))
-                    return move(gamestate, player, position, ai_player)
-                else:
-                    return gamestate
-
-            elif stones_left == 1 and ai_player:
-                gamestate.player2_kalaha += 1
-                if not kalaha.check_if_goal_state(gamestate):
-                    gamestate.go_again = True
-                    return gamestate
-                else:
-                    return gamestate
+                return {"state": gamestate, "go-again": True}
 
             elif stones_left > 1:
                 gamestate.player2_kalaha += 1
                 position = 0
                 player = "player 1"
                 return distribute_stone_on_board(
-                    gamestate, player, position, stones_left - 1, "player 2", ai_player
+                    gamestate, player, position, stones_left - 1, "player 2"
                 )
 
             else:
@@ -108,16 +80,11 @@ def distribute_kalaha(gamestate, player, stones_left, origin, ai_player):
             position = 0
             player = "player 1"
             return distribute_stone_on_board(
-                gamestate, player, position, stones_left, "player 2", ai_player
+                gamestate, player, position, stones_left, "player 2"
             )
 
-    else:
-        print("fail")
 
-
-def distribute_stone_on_board(
-    gamestate, player, position, stones_left, origin, ai_player
-):
+def distribute_stone_on_board(gamestate, player, position, stones_left, origin):
 
     if player == "player 1":
 
@@ -130,14 +97,12 @@ def distribute_stone_on_board(
 
         elif stones_left != 0 and position == 5:
             gamestate.player1_board[position] += 1
-            return distribute_kalaha(
-                gamestate, player, stones_left - 1, origin, ai_player
-            )
+            return distribute_kalaha(gamestate, player, stones_left - 1, origin)
 
         elif stones_left != 0:
             gamestate.player1_board[position] += 1
             return distribute_stone_on_board(
-                gamestate, player, position + 1, stones_left - 1, origin, ai_player
+                gamestate, player, position + 1, stones_left - 1, origin
             )
 
         else:
@@ -154,9 +119,7 @@ def distribute_stone_on_board(
 
         elif stones_left != 0 and position == 0:
             gamestate.player2_board[position] += 1
-            return distribute_kalaha(
-                gamestate, player, stones_left - 1, origin, ai_player
-            )
+            return distribute_kalaha(gamestate, player, stones_left - 1, origin)
 
         elif stones_left == 1 and position == 5:
             gamestate.player2_board[position] += 1
@@ -164,74 +127,80 @@ def distribute_stone_on_board(
         elif stones_left > 0 and position < 6:
             gamestate.player2_board[position] += 1
             return distribute_stone_on_board(
-                gamestate, player, position - 1, stones_left - 1, origin, ai_player
+                gamestate, player, position - 1, stones_left - 1, origin
             )
 
         else:
             return gamestate
 
 
-def move(gamestate, player, position, ai_player):
+def valid_move(gamestate, player, position):
+    # I guess we can assume that the search algorithm never enters this function.
+    # Therefore, this function can be removed when we have two agents play agents
+    # each other
 
     while True:
-        if (
-            player == "player 1"
-            and gamestate.player1_board[position] == 0
-            or player == "player 2"
-            and gamestate.player2_board[position] == 0
-        ):
+        try:
+            if player != "player 2" or gamestate.player2_board[position] != 0:
+                return position
             position = int(
                 input(
                     f"\nPit {position} is already empty. Please choose another one: \n"
                 )
             )
-        else:
-            break
-
-    if player == "player 1":
-
-        if position == 5:
-            stones_left = gamestate.player1_board[position]
-            gamestate.player1_board[position] = 0
-            return distribute_kalaha(
-                gamestate, player, stones_left, "player 1", ai_player
+            if position not in range(6):
+                raise IndexError
+        except IndexError:
+            position = int(
+                input("\nTry again: Please insert a number between 0 and 5: ")
             )
 
-        else:
-            stones_left = gamestate.player1_board[position]
-            gamestate.player1_board[position] = 0
-            position += 1
-            return distribute_stone_on_board(
-                gamestate, player, position, stones_left, "player 1", ai_player
-            )
 
-    elif player == "player 2":
-
-        if position == 0:
-            stones_left = gamestate.player2_board[position]
-            gamestate.player2_board[position] = 0
-            return distribute_kalaha(
-                gamestate, player, stones_left, "player 2", ai_player
-            )
-
-        else:
-            stones_left = gamestate.player2_board[position]
-            gamestate.player2_board[position] = 0
-            position -= 1
-            return distribute_stone_on_board(
-                gamestate, player, position, stones_left, "player 2", ai_player
-            )
+def move_player1(gamestate, player, position):
+    stones_left = gamestate.player1_board[position]
+    if position == 5:
+        gamestate.player1_board[position] = 0
+        return distribute_kalaha(gamestate, player, stones_left, "player 1")
 
     else:
-        return gamestate
+        gamestate.player1_board[position] = 0
+        position += 1
+        return distribute_stone_on_board(
+            gamestate, player, position, stones_left, "player 1"
+        )
+
+
+def move_player2(gamestate, player, position):
+    stones_left = gamestate.player2_board[position]
+    if position == 0:
+        gamestate.player2_board[position] = 0
+        return distribute_kalaha(gamestate, player, stones_left, "player 2")
+
+    else:
+        gamestate.player2_board[position] = 0
+        position -= 1
+        return distribute_stone_on_board(
+            gamestate, player, position, stones_left, "player 2"
+        )
+
+
+def move(gamestate, player, position):
+    position = valid_move(gamestate, player, position)
+
+    if player == "player 1":
+        return move_player1(gamestate, player, position)
+
+    else:
+        return move_player2(gamestate, player, position)
 
 
 def distribute_remaining(gamestate):
-
     remaining1 = sum(gamestate.player1_board)
     gamestate.player1_kalaha += remaining1
+
     remaining2 = sum(gamestate.player2_board)
     gamestate.player2_kalaha += remaining2
+
     print(
         f"\nRemaining stones added:\nPlayer 1 - {remaining1}\nPlayer 2 - {remaining2}\n"
     )
