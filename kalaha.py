@@ -37,7 +37,7 @@ def check_if_goal_state(gamestate):
 
 def player1_turn(game):
     # AIs turn
-    best_move = algorithm.minimax(game, 3, float("-inf"), float("inf"), True)[1]
+    best_move = algorithm.minimax(game, 6, float("-inf"), float("inf"), True)[1]
     moves.move(game, "player 1", best_move)
     print(f"AI-Rian made his move! {best_move}")
     logger.info(print_game_state(game))
@@ -60,7 +60,13 @@ def player2_turn(game):
         return player2_turn(game)
 
     move = moves.move(game, "player 2", raw_input)
+
+  
     try:
+
+        if check_if_goal_state(game):
+            raise AttributeError
+
         move.get("go-again")
         logger.info(print_game_state(game))
         print("\nThe last ball ended in the Kalaha. You're allowed to go again.")
