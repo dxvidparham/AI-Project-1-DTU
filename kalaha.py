@@ -37,7 +37,7 @@ def check_if_goal_state(gamestate):
 
 def player1_turn(game):
     # AIs turn
-    best_move = algorithm.minimax(game, 6, float("-inf"), float("inf"), True)[1]
+    best_move = algorithm.minimax(game, 8, float("-inf"), float("inf"), True)[1]
     moves.move(game, "player 1", best_move)
     print(f"AI-Rian made his move! {best_move}")
     logger.info(print_game_state(game))

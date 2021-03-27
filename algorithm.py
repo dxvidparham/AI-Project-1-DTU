@@ -18,12 +18,16 @@ import moves
 
 def evaluate(gamestate):
 
-    sumStones = gamestate.player1_kalaha - gamestate.player2_kalaha
+    if kalaha.check_if_goal_state(gamestate):
+        gamestate.player2_kalaha += sum(gamestate.player2_board)
+        gamestate.player1_kalaha += sum(gamestate.player1_board)
+
+    sumstones = gamestate.player1_kalaha - gamestate.player2_kalaha
 
     # sumEmptyPits = len(gamestate.player1_board)-np.count_nonzero(gamestate.player1_board)
     # decision_factor = sumEmptyPits*0.1+sumStones
     
-    return sumStones
+    return sumstones
 
 
 def get_valid_moves(gamestate, player):
@@ -46,8 +50,6 @@ def max_search(gamestate, depth, alpha, beta, best_move=None):
     for bowl in get_valid_moves(gamestate, "player 1"):
         tmp_gamestate = copy.deepcopy(gamestate)
         moves.move(tmp_gamestate, "player 1", bowl)
-        if kalaha.check_if_goal_state(tmp_gamestate):
-            tmp_gamestate.player2_kalaha += sum(tmp_gamestate.player2_board) # evaluate that remaining stones will go to opponent
         if tmp_gamestate.go_again:
             evaluation = minimax(tmp_gamestate, depth - 1, alpha, beta, True)[0]
         else:
@@ -66,21 +68,16 @@ def min_search(gamestate, depth, alpha, beta, best_move=None):
     for bowl in get_valid_moves(gamestate, "player 2"):
         tmp_gamestate = copy.deepcopy(gamestate)
         moves.move(tmp_gamestate, "player 2", bowl)
-        if kalaha.check_if_goal_state(tmp_gamestate):
-            tmp_gamestate.player2_kalaha += sum(tmp_gamestate.player2_board) # evaluate that remaining stones will go to opponent
         if tmp_gamestate.go_again:
             evaluation = minimax(tmp_gamestate, depth - 1, alpha, beta, False)[0]
         else:
             evaluation = minimax(tmp_gamestate, depth - 1, alpha, beta, True)[0]
-        # append array
         min_value = min(min_value, evaluation)
         beta = min(beta, min_value)
         if beta <= alpha:
             break
         elif min_value == evaluation:
             best_move = bowl
-    # scale array
-    # evaluate best move
     return min_value, best_move
 
 

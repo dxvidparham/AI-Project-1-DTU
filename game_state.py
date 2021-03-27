@@ -16,3 +16,4 @@ class GameState:
         self.player2_board = [stone_cnt for _ in range(6)]
         self.player1_board = [stone_cnt for _ in range(6)]
         self.go_again = False
+
