@@ -14,7 +14,6 @@ from time import sleep
 import time
 from loguru import logger
 
-import algorithm_2
 import algorithm
 import game_state
 import moves
@@ -55,14 +54,11 @@ def check_if_goal_state(gamestate, game_mode):
 
 def player1_turn(game, game_mode):
     # AIs turn
-    start = time.process_time()
-    best_move = algorithm.minimax(game, 8, float("-inf"), float("inf"), True, game_mode)[1]
+    best_move = algorithm.minimax(game, 3, float("-inf"), float("inf"), True, game_mode)[1]
     moves.move(game, "player 1", best_move, game_mode)
 
-    print(f"AI-Rian made his move! {best_move}")
-    print('time taken by AI-Rian:',time.process_time() - start)
+    print(f"Player 1 move: {best_move}\n")
     logger.info(print_game_state(game, game_mode))
-    #sleep(2)
 
     if game.go_again and not check_if_goal_state(game, game_mode):
         print("\nThe last ball ended in the Kalaha. player 1 is allowed to go again.")
@@ -82,7 +78,6 @@ def player2_turn(game, game_mode):
 
     move = moves.move(game, "player 2", raw_input, game_mode)
 
-  
     try:
 
         if check_if_goal_state(game, game_mode):
@@ -98,16 +93,13 @@ def player2_turn(game, game_mode):
         return
 
 def player3_turn(game, game_mode):
-
-
-    start = time.process_time()
-    best_move = algorithm_2.minimax(game, 3, False, game_mode)[1]
+    # Second AIs turn
+    best_move = algorithm.minimax(game, 4, float("-inf"), float("inf"), False, game_mode)[1]
     moves.move(game, "player 3", best_move, game_mode)
 
-    print(f"Player 3 {best_move}")
-    print('time taken by Player 3:',time.process_time() - start)
+    print(f"Player 3 move: {best_move}\n")
     logger.info(print_game_state(game, game_mode))
-    #sleep(2)
+
 
     if game.go_again and not check_if_goal_state(game, game_mode):
         print("\nThe last ball ended in the Kalaha. player 3 is allowed to go again.")
@@ -133,10 +125,10 @@ def evaluate_game(game, game_mode):
 
     elif game_mode == "2":
       if game.player1_kalaha > game.player3_kalaha:
-          print("The Winner is:   Player 1 AI- Rian!!!")
+          print("The Winner is:   Player 1!")
 
       elif game.player1_kalaha < game.player3_kalaha:
-          print("The Winner is:   Player 3 AI - Random skynet employee!!!")
+          print("The Winner is:   Player 3!")
 
       else:
           print("We got a draw!")

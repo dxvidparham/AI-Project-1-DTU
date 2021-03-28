@@ -18,22 +18,20 @@ import moves
 def evaluate(gamestate, game_mode):
 
     if game_mode == "1":
-
         if kalaha.check_if_goal_state(gamestate, game_mode):
             gamestate.player2_kalaha += sum(gamestate.player2_board)
             gamestate.player1_kalaha += sum(gamestate.player1_board)
 
-        sumstones = gamestate.player1_kalaha - gamestate.player2_kalaha
+        evaluation = gamestate.player1_kalaha - gamestate.player2_kalaha
+
     elif game_mode == "2":
         if kalaha.check_if_goal_state(gamestate, game_mode):
             gamestate.player3_kalaha += sum(gamestate.player3_board)
             gamestate.player1_kalaha += sum(gamestate.player1_board)
 
-        sumstones = gamestate.player1_kalaha - gamestate.player3_kalaha
-    # sumEmptyPits = len(gamestate.player1_board)-np.count_nonzero(gamestate.player1_board)
-    # decision_factor = sumEmptyPits*0.1+sumStones
+        evaluation = gamestate.player1_kalaha - gamestate.player3_kalaha
 
-    return sumstones
+    return evaluation
 
 
 def get_valid_moves(gamestate, player):
@@ -57,11 +55,11 @@ def get_valid_moves(gamestate, player):
 
 
 def max_search(gamestate, depth, alpha, beta, game_mode, best_move=None):
-    player = {"1": "player 2", "2": "player 3"}
     max_value = float("-inf")
-    for bowl in get_valid_moves(gamestate, player.get(game_mode)):
+    # player 1 is always the maximizing player
+    for bowl in get_valid_moves(gamestate, "player 1"):
         tmp_gamestate = copy.deepcopy(gamestate)
-        moves.move(tmp_gamestate, player.get(game_mode), bowl, game_mode)
+        moves.move(tmp_gamestate, "player 1", bowl, game_mode)
         if tmp_gamestate.go_again:
             evaluation = minimax(
                 tmp_gamestate, depth - 1, alpha, beta, True, game_mode
@@ -81,6 +79,7 @@ def max_search(gamestate, depth, alpha, beta, game_mode, best_move=None):
 
 
 def min_search(gamestate, depth, alpha, beta, game_mode, best_move=None):
+    # based on game mode, the minimizing player is switched
     player = {"1": "player 2", "2": "player 3"}
     min_value = float("inf")
     for bowl in get_valid_moves(gamestate, player.get(game_mode)):
