@@ -14,6 +14,7 @@ from time import sleep
 import time
 from loguru import logger
 
+import algorithm_2
 import algorithm
 import game_state
 import moves
@@ -57,8 +58,7 @@ def player1_turn(game, game_mode):
     start = time.process_time()
     best_move = algorithm.minimax(game, 8, float("-inf"), float("inf"), True, game_mode)[1]
     moves.move(game, "player 1", best_move, game_mode)
-    print("memory usage before move:", start_memory)
-    print("memory usage after move:", end_memory)
+
     print(f"AI-Rian made his move! {best_move}")
     print('time taken by AI:',time.process_time() - start)
     logger.info(print_game_state(game, game_mode))
@@ -80,7 +80,7 @@ def player2_turn(game, game_mode):
         print("\nTry again: Please insert a number between 0 and 5")
         return player2_turn(game, game_mode)
 
-    move = moves.move(game, "player 2", raw_input)
+    move = moves.move(game, "player 2", raw_input, game_mode)
 
   
     try:
@@ -99,27 +99,18 @@ def player2_turn(game, game_mode):
 
 def player3_turn(game, game_mode):
 
-     
-    best_move = algorithm.minimax(game, 8, float("-inf"), float("inf"), True)[1]
-    moves.move(game, "player 1", best_move)
-
-    print(f"AI-Rian made his move! {best_move}")
-    print('time taken by AI:',time.process_time() - start)
-
-
-
 
     start = time.process_time()
     best_move = algorithm_2.minimax(game, 3, True, game_mode)[1]
     moves.move(game, "player 1", best_move, game_mode)
 
-    print(f"AI-Rian made his move! {best_move}")
-    print('time taken by AI:',time.process_time() - start)
+    print(f"AI- Random skynet employee made his move! {best_move}")
+    print('time taken by Random skynet employee:',time.process_time() - start)
     logger.info(print_game_state(game, game_mode))
     #sleep(2)
 
     if game.go_again and not check_if_goal_state(game, game_mode):
-        print("\nThe last ball ended in the Kalaha. player 1 is allowed to go again.")
+        print("\nThe last ball ended in the Kalaha. player 3 is allowed to go again.")
         game.go_again = False
         return player3_turn(game, game_mode)
 
@@ -142,10 +133,10 @@ def evaluate_game(game, game_mode):
 
     elif game_mode == "2":
       if game.player1_kalaha > game.player3_kalaha:
-          print("The Winner is:   Player 1!!!")
+          print("The Winner is:   Player 1 AI- Rian!!!")
 
       elif game.player1_kalaha < game.player3_kalaha:
-          print("The Winner is:   Player 3!!!")
+          print("The Winner is:   Player 3 AI - Random skynet employee!!!")
 
       else:
           print("We got a draw!")
@@ -196,7 +187,10 @@ def main():
               if check_if_goal_state(game, game_mode):
                   break
 
-          evaluate_game(game)
+
+
+
+          evaluate_game(game, game_mode)
 
       else:
           sys.exit()

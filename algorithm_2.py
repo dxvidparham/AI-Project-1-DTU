@@ -38,7 +38,7 @@ def minimax(gamestate, depth, maximizing_player, game_mode):
         for bowl in get_valid_moves(gamestate, "player 1"):
             tmp_gamestate = copy.deepcopy(gamestate)
             moves.move(tmp_gamestate, "player 1", bowl, game_mode)
-            evaluation = minimax(tmp_gamestate, depth - 1, False)[0]
+            evaluation = minimax(tmp_gamestate, depth - 1, False, game_mode)[0]
             max_value = max(max_value, evaluation)
             if max_value == evaluation:
                 best_move = bowl
@@ -50,7 +50,7 @@ def minimax(gamestate, depth, maximizing_player, game_mode):
         for bowl in get_valid_moves(gamestate, "player 3"):
             tmp_gamestate = copy.deepcopy(gamestate)
             moves.move(tmp_gamestate, "player 3", bowl, game_mode)
-            evaluation = minimax(tmp_gamestate, depth - 1, True)[0]
+            evaluation = minimax(tmp_gamestate, depth - 1, True, game_mode)[0]
             min_value = min(min_value, evaluation)
             if min_value == evaluation:
                 best_move = bowl

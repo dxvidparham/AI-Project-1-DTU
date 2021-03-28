@@ -166,16 +166,16 @@ def distribute_stone_on_board(gamestate, player, position, stones_left, origin, 
             and gamestate.player1_board[position] == 0
             and player == origin
         ):
-            return capture_stones(gamestate, player, position)
+            return capture_stones(gamestate, player, position, game_mode)
 
         elif stones_left != 0 and position == 5:
             gamestate.player1_board[position] += 1
-            return distribute_kalaha(gamestate, player, stones_left - 1, origin)
+            return distribute_kalaha(gamestate, player, stones_left - 1, origin, game_mode)
 
         elif stones_left != 0:
             gamestate.player1_board[position] += 1
             return distribute_stone_on_board(
-                gamestate, player, position + 1, stones_left - 1, origin
+                gamestate, player, position + 1, stones_left - 1, origin, game_mode
             )
 
         else:
@@ -188,11 +188,11 @@ def distribute_stone_on_board(gamestate, player, position, stones_left, origin, 
             and gamestate.player2_board[position] == 0
             and player == origin
         ):
-            return capture_stones(gamestate, player, position)
+            return capture_stones(gamestate, player, position, game_mode)
 
         elif stones_left != 0 and position == 0:
             gamestate.player2_board[position] += 1
-            return distribute_kalaha(gamestate, player, stones_left - 1, origin)
+            return distribute_kalaha(gamestate, player, stones_left - 1, origin, game_mode)
 
         elif stones_left == 1 and position == 5:
             gamestate.player2_board[position] += 1
@@ -200,7 +200,7 @@ def distribute_stone_on_board(gamestate, player, position, stones_left, origin, 
         elif stones_left > 0 and position < 6:
             gamestate.player2_board[position] += 1
             return distribute_stone_on_board(
-                gamestate, player, position - 1, stones_left - 1, origin
+                gamestate, player, position - 1, stones_left - 1, origin, game_mode
             )
 
         else:
@@ -321,7 +321,6 @@ def move_player3(gamestate, player, position, game_mode):
 def move(gamestate, player, position, game_mode):
     #if game_mode == "1":
     #  position = valid_move(gamestate, player, position)
-    print (position)
     if player == "player 1":
         return move_player1(gamestate, player, position, game_mode)
 
