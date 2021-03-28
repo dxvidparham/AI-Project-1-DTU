@@ -60,7 +60,7 @@ def player1_turn(game, game_mode):
     moves.move(game, "player 1", best_move, game_mode)
 
     print(f"AI-Rian made his move! {best_move}")
-    print('time taken by AI:',time.process_time() - start)
+    print('time taken by AI-Rian:',time.process_time() - start)
     logger.info(print_game_state(game, game_mode))
     #sleep(2)
 
@@ -101,11 +101,11 @@ def player3_turn(game, game_mode):
 
 
     start = time.process_time()
-    best_move = algorithm_2.minimax(game, 3, True, game_mode)[1]
-    moves.move(game, "player 1", best_move, game_mode)
+    best_move = algorithm_2.minimax(game, 3, False, game_mode)[1]
+    moves.move(game, "player 3", best_move, game_mode)
 
-    print(f"AI- Random skynet employee made his move! {best_move}")
-    print('time taken by Random skynet employee:',time.process_time() - start)
+    print(f"Player 3 {best_move}")
+    print('time taken by Player 3:',time.process_time() - start)
     logger.info(print_game_state(game, game_mode))
     #sleep(2)
 

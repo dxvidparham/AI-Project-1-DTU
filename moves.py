@@ -319,8 +319,8 @@ def move_player3(gamestate, player, position, game_mode):
         )
 
 def move(gamestate, player, position, game_mode):
-    #if game_mode == "1":
-    #  position = valid_move(gamestate, player, position)
+    # if game_mode == "1":
+    position = valid_move(gamestate, player, position)
     if player == "player 1":
         return move_player1(gamestate, player, position, game_mode)
 

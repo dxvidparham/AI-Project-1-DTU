@@ -49,7 +49,7 @@ def get_valid_moves(gamestate, player):
             if gamestate.player2_board[bowl] != 0:
                 valid_moves.append(bowl)
 
-    else:
+    elif player == "player 3":
         for bowl in range(len(gamestate.player3_board)):
             if gamestate.player3_board[bowl] != 0:
                 valid_moves.append(bowl)
