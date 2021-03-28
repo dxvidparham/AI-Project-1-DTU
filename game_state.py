@@ -13,7 +13,8 @@ class GameState:
 
         self.player1_kalaha = 0
         self.player2_kalaha = 0
+        self.player3_kalaha = 0
+        self.player3_board = [stone_cnt for _ in range(6)]
         self.player2_board = [stone_cnt for _ in range(6)]
         self.player1_board = [stone_cnt for _ in range(6)]
         self.go_again = False
-
