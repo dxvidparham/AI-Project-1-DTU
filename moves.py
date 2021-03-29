@@ -136,25 +136,40 @@ def distribute_stone_on_board(gamestate, player, position, stones_left, origin):
 
 
 def valid_move(gamestate, player, position):
-    # I guess we can assume that the search algorithm never enters this function.
-    # Therefore, this function can be removed when we have two agents play agents
-    # each other
 
     while True:
-        try:
-            if player != "player 2" or gamestate.player2_board[position] != 0:
-                return position
-            position = int(
-                input(
-                    f"\nPit {position} is already empty. Please choose another one: \n"
+
+        if player == "player 1":
+            try:
+                if player != "player 1" or gamestate.player1_board[position] != 0:
+                    return position
+                position = int(
+                    input(
+                        f"\nPit {position} is already empty. Please choose another one: \n"
+                    )
                 )
-            )
-            if position not in range(6):
-                raise IndexError
-        except IndexError:
-            position = int(
-                input("\nTry again: Please insert a number between 0 and 5: ")
-            )
+                if position not in range(6):
+                    raise IndexError
+            except IndexError:
+                position = int(
+                    input("\nTry again: Please insert a number between 0 and 5: ")
+                )
+
+        else:
+            try:
+                if player != "player 2" or gamestate.player2_board[position] != 0:
+                    return position
+                position = int(
+                    input(
+                        f"\nPit {position} is already empty. Please choose another one: \n"
+                    )
+                )
+                if position not in range(6):
+                    raise IndexError
+            except IndexError:
+                position = int(
+                    input("\nTry again: Please insert a number between 0 and 5: ")
+                )
 
 
 def move_player1(gamestate, player, position):
