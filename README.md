@@ -32,6 +32,10 @@ a game through the Command Line Interface (CLI) by running the file Kalaha.py
 After starting the file, the user is asked whether he wants to play against the AI agent himself
 or if he wants to watch two agents playing against each other. The tree depth can be set in the main(), when calling the agents.
 
+For using the logger functionality, the user might need to install the following package:
+
+> $: pip install loguru
+
 
 ## Search algorithm
  For this implementation,the minimax algorithm with alpha-beta pruning was chosen. However, other methods and algorithms like reinforcement learning, stochastic- or Monte-Carlo tree search could be used for this agent.
