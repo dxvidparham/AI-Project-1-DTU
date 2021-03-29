@@ -11,9 +11,9 @@
 
 import sys
 from time import sleep
-
 from loguru import logger
 
+import algorithm2
 import algorithm
 import game_state
 import moves
@@ -35,42 +35,47 @@ def check_if_goal_state(gamestate):
     )
 
 
-def player1_turn(game):
-    # AIs turn
-    best_move = algorithm.minimax(game, 8, float("-inf"), float("inf"), True)[1]
-    moves.move(game, "player 1", best_move)
-    print(f"AI-Rian made his move! {best_move}")
+def ai_turn(game, player, depth):
+
+    if player == "player 1":
+        best_move = algorithm.minimax(game, depth, float("-inf"), float("inf"), True)[1]
+
+    else:
+        best_move = algorithm.minimax(game, depth, float("-inf"), float("inf"), False)[1]
+
+    moves.move(game, player, best_move)
+    print(f"{player} made his move: {best_move}")
     logger.info(print_game_state(game))
     sleep(2)
 
     if game.go_again and not check_if_goal_state(game):
-        print("\nThe last ball ended in the Kalaha. player 1 is allowed to go again.")
+        print(f"\nThe last ball ended in the Kalaha. {player} is allowed to go again.")
         game.go_again = False
-        return player1_turn(game)
+        return ai_turn(game, player, depth)
 
 
-def player2_turn(game):
-    # Players turn
+def player_turn(game, player):
+
     try:
-        raw_input = int(input("player 2s turn (0, 1, 2, 3, 4, 5) "))
+        raw_input = int(input(f"{player}s turn (0, 1, 2, 3, 4, 5) "))
         if raw_input not in range(6):
             raise ValueError
     except ValueError:
         print("\nTry again: Please insert a number between 0 and 5")
-        return player2_turn(game)
+        return player_turn(game, player)
 
-    move = moves.move(game, "player 2", raw_input)
+    move = moves.move(game, player, raw_input)
 
-  
     try:
 
         if check_if_goal_state(game):
             raise AttributeError
 
-        move.get("go-again")
-        logger.info(print_game_state(game))
-        print("\nThe last ball ended in the Kalaha. You're allowed to go again.")
-        return player2_turn(game)
+        if game.go_again:
+            game.go_again = False
+            logger.info(print_game_state(game))
+            print("\nThe last ball ended in the Kalaha. You're allowed to go again.")
+            return player_turn(game, player)
 
     except AttributeError:
         logger.info(print_game_state(game))
@@ -100,19 +105,47 @@ def main():
     raw_input = input("Welcome to a dumb implementation of Kalaha. Are you ready? y/n ")
 
     if raw_input.lower() == "y":
-        logger.info(print_game_state(game))
 
-        while True:
+        game_mode = int(input("What game mode would you like? 1: ai vs. ai, 2: player vs. ai, 3: ai vs. player? (1, 2, 3)"))
 
-            player1_turn(game)
-            if check_if_goal_state(game):
-                break
+        if game_mode == 1:
 
-            player2_turn(game)
-            if check_if_goal_state(game):
-                break
+            logger.info(print_game_state(game))
+            while True:
+                ai_turn(game, "player 1", depth=4)
+                if check_if_goal_state(game):
+                    break
+                ai_turn(game, "player 2", depth=4)
+                if check_if_goal_state(game):
+                    break
+            evaluate_game(game)
 
-        evaluate_game(game)
+        elif game_mode == 2:
+
+            logger.info(print_game_state(game))
+            while True:
+                player_turn(game, "player 1")
+                if check_if_goal_state(game):
+                    break
+                ai_turn(game, "player 2", depth=4)
+                if check_if_goal_state(game):
+                    break
+            evaluate_game(game)
+
+        elif game_mode == 3:
+
+            logger.info(print_game_state(game))
+            while True:
+                ai_turn(game, "player 1", depth=4)
+                if check_if_goal_state(game):
+                    break
+                player_turn(game, "player 2")
+                if check_if_goal_state(game):
+                    break
+            evaluate_game(game)
+
+        else:
+            sys.exit()
 
     else:
         sys.exit()

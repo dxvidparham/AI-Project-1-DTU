@@ -63,6 +63,7 @@ def distribute_kalaha(gamestate, player, stones_left, origin):
         if player == origin:
             if stones_left == 1:
                 gamestate.player2_kalaha += 1
+                gamestate.go_again = True
                 return {"state": gamestate, "go-again": True}
 
             elif stones_left > 1:

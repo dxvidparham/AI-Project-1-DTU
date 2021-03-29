@@ -17,17 +17,19 @@ import moves
 
 
 def evaluate(gamestate):
-
     if kalaha.check_if_goal_state(gamestate):
         gamestate.player2_kalaha += sum(gamestate.player2_board)
         gamestate.player1_kalaha += sum(gamestate.player1_board)
 
     sumstones = gamestate.player1_kalaha - gamestate.player2_kalaha
+
+    #sumEmptyPits = len(gamestate.player1_board)-np.count_nonzero(gamestate.player1_board)
+    # decision_factor = sumEmptyPits*0.1+sumStones
+
     return sumstones
 
 
 def get_valid_moves(gamestate, player):
-
     valid_moves = []
     if player == "player 1":
         for bowl in range(len(gamestate.player1_board)):
@@ -52,9 +54,9 @@ def max_search(gamestate, depth, alpha, beta, best_move=None):
             evaluation = minimax(tmp_gamestate, depth - 1, alpha, beta, False)[0]
         max_value = max(max_value, evaluation)
         alpha = max(alpha, max_value)
-        if alpha >= beta:
-            break
-        elif max_value == evaluation:
+        #if alpha >= beta:
+            #break
+        if max_value == evaluation:
             best_move = bowl
     return max_value, best_move
 
@@ -70,15 +72,14 @@ def min_search(gamestate, depth, alpha, beta, best_move=None):
             evaluation = minimax(tmp_gamestate, depth - 1, alpha, beta, True)[0]
         min_value = min(min_value, evaluation)
         beta = min(beta, min_value)
-        if beta <= alpha:
-            break
-        elif min_value == evaluation:
+        #if beta <= alpha:
+            #break
+        if min_value == evaluation:
             best_move = bowl
     return min_value, best_move
 
 
 def minimax(gamestate, depth, alpha, beta, maximizing_player):
-
     if depth == 0 or kalaha.check_if_goal_state(gamestate):
         return evaluate(gamestate), gamestate
 
