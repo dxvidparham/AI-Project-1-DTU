@@ -13,7 +13,6 @@ import sys
 from time import sleep
 from loguru import logger
 
-import algorithm2
 import algorithm
 import game_state
 import moves
