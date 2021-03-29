@@ -22,7 +22,6 @@ The number of stones in the chosen pit will be distributed in a counter-clockwis
 Agent vs Agent          |  Player vs Agent
 :-------------------------:|:-------------------------:
 ![AI vs AI gif](media/agent.gif)  |  ![Player vs AI gif](media/player.gif)
-<!-- <img src="https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif" width="40" height="40" /> -->
 
 ## Usage
 Our implementation does not include a graphical user interface (GUI). Therefore it is necessary to create a
@@ -35,9 +34,9 @@ or if he wants to watch two agents playing against each other.
 
 
 ## Search algorithm
- For this implementation,the minimax algorithm with alpha-beta pruning was chosen. However, other methods andalgorithms like reinforcement learning, stochastic- or Monte-Carlo tree search could be usedfor this agent.
+ For this implementation,the minimax algorithm with alpha-beta pruning was chosen. However, other methods and algorithms like reinforcement learning, stochastic- or Monte-Carlo tree search could be used for this agent.
 
- The minimax algorithm with alpha-beta pruning was implemented based on the pseudocodefrom chapter five in Norvig et al. [3], but with minor tweaks. As there is no frontier, thesearch algorithm creates deep copies of the game state initially passed and returns evaluationsof each state recursively
+ The minimax algorithm with alpha-beta pruning was implemented based on the pseudo code from chapter five of the book "Artificial intelligence a Modern approach 3rd edition", but with minor tweaks. As there is no frontier, the search algorithm creates deep copies of the game state initially passed and returns evaluations of each state recursively.
 
 ## Project structure
 - Kalaha.py
